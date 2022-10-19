@@ -39,3 +39,6 @@ Talk through each section with your partner. Add notes on what you discussed and
 ## Signatures
 Ariel Wilson _______________
 Date: 10/19/2022 _________
+
+Laura Skomerza
+Date: 10/19/2022
