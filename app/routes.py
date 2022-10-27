@@ -17,11 +17,11 @@ planets = [
 '''
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planet")
 
-@planets_bp("", methods=["POST"])
+@planets_bp.route("", methods=["POST"])
 
 def add_planet():
-    request_body = request.get_json
-
+    request_body = request.get_json()
+    print(request_body)
     new_planet = Planets(
         name=request_body["name"],
         description=request_body["description"],
@@ -31,9 +31,12 @@ def add_planet():
     db.session.add(new_planet)
     db.session.commit() 
 
+    return {"id": new_planet.id}, 201
+
 @planets_bp.route("", methods=["GET"])
 
 def get_all_planets():
+    planets = Planets.query.all()
     response = []
     for planet in planets:
         this_one = {
@@ -45,6 +48,7 @@ def get_all_planets():
         response.append(this_one)
     return jsonify(response), 200
 
+'''
 @planets_bp.route("/<planet_id>", methods=["GET"])
 def get_one_planet(planet_id):
     try:
@@ -65,3 +69,5 @@ def get_one_planet(planet_id):
     
     response_404 = f"No planet with this id {planet_id}"
     return jsonify({"Message": response_404}), 404
+    '''
+
