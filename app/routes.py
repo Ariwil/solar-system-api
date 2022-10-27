@@ -1,5 +1,7 @@
-from flask import Blueprint, jsonify
-
+from flask import Blueprint, jsonify, request
+from app import db
+from app.models.planet import Planets
+'''
 class Planet:
     def __init__(self, id, name, description, moons):
         self.id = id
@@ -12,8 +14,22 @@ planets = [
     Planet(2, "Venus", "hottest planet", "None"),
     Planet(3, "Earth", "planet with people", "moon")
 ]
-
+'''
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planet")
+
+@planets_bp("", methods=["POST"])
+
+def add_planet():
+    request_body = request.get_json
+
+    new_planet = Planets(
+        name=request_body["name"],
+        description=request_body["description"],
+        moons=request_body["moons"]
+    )
+
+    db.session.add(new_planet)
+    db.session.commit() 
 
 @planets_bp.route("", methods=["GET"])
 
