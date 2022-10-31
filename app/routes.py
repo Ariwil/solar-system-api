@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, abort, make_response
 from app import db
 from app.models.planet import Planets
 '''
@@ -16,6 +16,23 @@ planets = [
 ]
 '''
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planet")
+
+def get_one_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except ValueError:
+        response_message = f"Error. {planet_id} must be an integer."
+        abort(make_response(jsonify({"Message": response_message})), 400)
+
+    matching_planet = Planets.query.get(planet_id)
+
+    if matching_planet is None:
+        response_message = f"Planet with id {planet_id} was not found in the database"
+        abort(make_response(jsonify({"Message": response_message})), 404)
+
+    return matching_planet
+
+
 
 @planets_bp.route("", methods=["POST"])
 
@@ -47,6 +64,8 @@ def get_all_planets():
         }
         response.append(this_one)
     return jsonify(response), 200
+
+
 
 '''
 @planets_bp.route("/<planet_id>", methods=["GET"])
